@@ -2,10 +2,25 @@
 //
 
 #include <iostream>
+#include "Labs/Labs.h"
+
+using namespace std;
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    cout << " 3. Week 3 - Linked lists" << endl;
+
+    int choice;
+    cin >> choice;
+
+    switch (choice)
+    {
+    case 3:
+        runWeek03();
+        break;
+    }
+
+    return 0;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

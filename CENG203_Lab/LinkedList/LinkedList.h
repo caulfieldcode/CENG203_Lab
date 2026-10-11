@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Node.h"
 
 class LinkedList
@@ -9,10 +8,19 @@ private:
 
 public:
 	LinkedList();
-	~LinkedLÝST();
+	~LinkedList();
 
-	void insertAtFront(int value);
+	void insterAtFront(int value);
 	void display() const;
 	bool isEmpty() const;
-	 
+
+	void insertAtEnd(int value);
+	int length() const;
+	void createFromArray(int arr[], int size);
+	int search(int value) const;
+	int update(int oldValue, int newValue);
+	bool insertAt(int value, int position);
+	bool deleteValue(int value);
+	void merge(LinkedList& other);
 };
+
