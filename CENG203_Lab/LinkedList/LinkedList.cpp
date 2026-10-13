@@ -38,36 +38,113 @@ bool LinkedList::isEmpty() const
 
 void LinkedList::insertAtEnd(int value)
 {
+	Node* newNode = new Node(); //heap
+	newNode->data = value;
+	newNode->next = nullptr;
 
+	if (head == nullptr) { //if we don't have linked list
+		head = newNode;
+		return;
+	}
+
+	Node* curr = head;  //you can't move the head
+
+	while (curr->next != nullptr) {
+		curr = curr->next;
+	}
+	curr->next = newNode;
 }
 
-int LinkedList::length() const
+int LinkedList::length() const //number of nodes
 {
-	return 0;
+	int number = 0;
+	Node* curr = head;
+
+	while (curr != nullptr)
+	{
+		number++;
+		curr = curr->next;
+	}
+	return number;
 }
+
 
 void LinkedList::createFromArray(int arr[], int size)
 {
+	for (int i = 0;i < sizeof(arr);i++) {
+		insertAtEnd(arr[i]);
+	}
 }
 
 int LinkedList::search(int value) const
 {
-	return -1;
+	int index = -1;
+		int counter = 0;
+
+		Node* curr = head;
+		while (curr != nullptr) {
+			if (curr->data == value) {
+				index = counter;
+				return index;
+			}
+			curr = curr->next;
+			counter = counter + 1;
+			
+		}
+		return index;
 }
 
 int LinkedList::update(int oldValue, int newValue)
 {
-	return 0;
+   Node* curr= head;
+   int count = 0;
+
+   while (curr != nullptr) {
+	   if (curr->data == oldValue) {
+		   curr->data = newValue;
+		   count++;
+	   }
+	   curr=curr->next;
+   }
+   return count;
 }
 
 bool LinkedList::insertAt(int index, int value)
 {
-	return false;
+	return false; 
 }
 
 bool LinkedList::deleteValue(int value)
 {
-	return false;
+	
+	Node* curr = head;
+	Node* prev = head;
+	
+
+	if (curr == nullptr) {  //if we dont have list
+		return false;
+	}
+
+	if (curr->data == value) {  //if value is in first node(head)
+		curr->next = head;
+		delete curr;
+		return true;
+	}
+	curr = head->next; //if it is not in first node, we can move the next
+	
+
+	while (curr!=nullptr) {
+		if (curr->data == value) {
+			prev = curr->next;
+			delete curr;
+			result = 1;
+		}
+		prev = curr;
+		curr = curr->next;
+		
+	}
+	return result;
+	
 }
 
 void LinkedList::merge(LinkedList& other)

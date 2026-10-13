@@ -20,9 +20,10 @@ void runWeek03()
 	Node* n3 = new Node;
 	n1->data = 5; n2->data = 7; n3->data = 11;
 	n1->next = n2; n2->next = n3; n3->next = nullptr;
-	for (Node* cur = n1; cur != nullptr; cur = cur->next)
+	for (Node* cur = n1; cur != nullptr; cur = cur->next) {
 		cout << "[Q1] " << cur << " data = " << cur->data
-		<< "next = " << cur->next << endl;
+			<< "next = " << cur->next << endl;
+	}
 	delete n3; delete n2; delete n1;
 	//Q2
 	int arr[] = { 7, 2, 5, 4 };
