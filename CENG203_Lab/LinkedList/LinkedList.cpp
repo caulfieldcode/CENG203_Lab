@@ -134,16 +134,18 @@ bool LinkedList::deleteValue(int value)
 	
 
 	while (curr!=nullptr) {
-		if (curr->data == value) {
-			prev = curr->next;
+		if (curr->data == value) { //30
+			
+			prev->next = curr->next; //29'un nexti= 31i gösteirr.
 			delete curr;
-			result = 1;
+
+			return true;
 		}
-		prev = curr;
-		curr = curr->next;
+		prev = curr;              //29
+		curr = curr->next;        //31
 		
 	}
-	return result;
+	return false;
 	
 }
 
