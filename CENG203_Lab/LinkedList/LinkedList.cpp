@@ -111,7 +111,42 @@ int LinkedList::update(int oldValue, int newValue)
 
 bool LinkedList::insertAt(int index, int value)
 {
-	return false; 
+	Node* curr = head;
+	int count = 0;
+
+	while (curr != 0) {
+		count = count + 1;
+
+		curr = curr->next;
+	}
+
+	if (index > count) {
+		return false;
+	}
+
+	else if (index<0) {
+		return false;
+
+	}
+
+
+	else {
+		count = 0;
+		curr = head;
+		while (curr != nullptr) {
+
+			if (count == index) {
+				Node* newN = New Node();
+				newN->data = value;
+				newN->next = curr->next;
+				return true;
+			}
+			count = count + 1;
+			curr = curr->next;
+		}
+
+
+	}
 }
 
 bool LinkedList::deleteValue(int value)
