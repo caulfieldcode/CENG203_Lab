@@ -21,15 +21,4 @@ public:
     int  size() const;
     void display() const;           // FIFO order + the raw array
 };
-void CircularQueue::display() const
-{
-    cout << "front ->";
-    for (int i = 0; i < count; i++)
-        cout << " " << items[(front + i) % CAPACITY];
-    if (isEmpty())
-        cout << " (empty)";
-    cout << " <- rear   | array:";
-    for (int i = 0; i < CAPACITY; i++)
-        cout << " " << items[i];
-    cout << "  front=" << front << " count=" << count << endl;
-}
+

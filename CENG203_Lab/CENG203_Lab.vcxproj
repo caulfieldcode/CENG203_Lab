@@ -124,8 +124,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Labs\Week03.cpp" />
+    <ClCompile Include="Labs\Week04.cpp" />
     <ClCompile Include="LinkedList\LinkedList.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Queue\CircularQueue.cpp" />
+    <ClCompile Include="Queue\Queue.cpp" />
+    <ClCompile Include="Stack\ArrayStack.cpp" />
+    <ClCompile Include="Stack\Stack.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,5 +1,4 @@
 #pragma once
-
 // Stack stored in a fixed-size array: overflow is possible.
 class ArrayStack
 {
@@ -19,4 +18,3 @@ public:
     int  size() const;
     void display() const;           // top -> 50 40 30 20 10
 };
-            
