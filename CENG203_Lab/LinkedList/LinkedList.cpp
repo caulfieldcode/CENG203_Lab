@@ -111,42 +111,37 @@ int LinkedList::update(int oldValue, int newValue)
 
 bool LinkedList::insertAt(int index, int value)
 {
-	Node* curr = head;
 	int count = 0;
-
-	while (curr != 0) {
-		count = count + 1;
-
+	Node* curr = head;
+	while (curr != nullptr) {  //liste uzunluğu
+		count++;
 		curr = curr->next;
 	}
 
-	if (index > count) {
+	if (index < 0 || index > count) {  //indexi dogru verdimi kontrol
 		return false;
 	}
 
-	else if (index<0) {
-		return false;
+	Node* newNode = new Node();  //index e degeri koymak icin yeni node
+	newNode->data = value;
 
+	
+	if (index == 0) {  //eger 0. index verilirse özel durum
+		newNode->next = head;
+		head = newNode;
+		return true;
 	}
 
-
-	else {
-		count = 0;
-		curr = head;
-		while (curr != nullptr) {
-
-			if (count == index) {
-				Node* newN = New Node();
-				newN->data = value;
-				newN->next = curr->next;
-				return true;
-			}
-			count = count + 1;
-			curr = curr->next;
-		}
-
-
+	
+	curr = head;
+	for (int i = 0; i < index - 1; i++) { //curr'i index-1 kadar tasiyoruz. next->new node yapmak icin.
+		curr = curr->next;
 	}
+
+	newNode->next = curr->next; 
+	curr->next = newNode;
+
+	return true;
 }
 
 bool LinkedList::deleteValue(int value)

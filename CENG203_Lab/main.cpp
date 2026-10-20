@@ -8,7 +8,6 @@ using namespace std;
 
 int main()
 {
-    cout << " 3. Week 3 - Linked lists" << endl;
 
     int choice;
     cin >> choice;
@@ -16,9 +15,15 @@ int main()
     switch (choice)
     {
     case 3:
+        cout << " 3. Week 3 - Linked lists" << endl;
         runWeek03();
         break;
-    }
+
+    case 4:
+        cout << " 4. Week 4 - Stacks and queues" << endl;
+        runWeek04();
+        break;
+}
 
     return 0;
 }
