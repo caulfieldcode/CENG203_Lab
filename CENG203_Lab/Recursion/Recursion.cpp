@@ -1,94 +1,175 @@
-#include "Labs.h"
-#include "../Recursion/Recursion.h"
-#include "../LinkedList/LinkedList.h"
+#include "Recursion.h"
 #include <iostream>
-#include <iomanip>                  // setprecision
-#include <stdexcept>                // invalid_argument
+#include <stdexcept>                // std::invalid_argument
 using namespace std;
 
-void runWeek05()
+// ============================ Q1 / Q2 ============================
+void countdown(int n)
 {
-    cout << "--- Week 5: Recursion and Stack Tracing ---" << endl;
-    cout << boolalpha;
-
-    // ---------- Q1: countdown trace ----------
-    cout << "[Q1]" << endl;
-    countdown(3);
-
-    // ---------- Q2: infinite recursion ----------
-    // buggyCountdown(3);           // Q2: uncomment, run, comment again
-    cout << "[Q2] fixedCountdown: ";
-    fixedCountdown(3);
-    cout << endl;
-
-    // ---------- Q3: tail vs non-tail print ----------
-    cout << "[Q3] tailPrint(3):    ";  tailPrint(3);     cout << endl;
-    cout << "[Q3] nonTailPrint(3): ";  nonTailPrint(3);  cout << endl;
-
-    // ---------- Q4: tail vs non-tail sum ----------
-    cout << "[Q4] tailSum(5, 0) = " << tailSum(5, 0)
-        << "   nonTailSum(5) = " << nonTailSum(5) << endl;
-
-    // ---------- Q5: factorial ----------
-    try {
-        cout << "[Q5] factorial(5) = " << factorial(5)
-            << "   factorial(0) = " << factorial(0) << endl;
-        cout << "[Q5] factorial(20) = " << factorial(20) << endl;
-        cout << "[Q5] factorialTail(4, 1) = " << factorialTail(4, 1)
-            << endl;
-        cout << "[Q5] calling factorial(-3) ..." << endl;
-        long long bad = factorial(-3);          // throws: next line skipped
-        cout << "[Q5] factorial(-3) = " << bad << endl;
+    cout << "Entering countdown(" << n << "), stack level " << n << endl;
+    if (n <= 0) {
+        cout << "Base case reached!" << endl;
+        return;                     // base case: no further call
     }
-    catch (const invalid_argument& e) {
-        cout << "[Q5] Error: " << e.what() << endl;
+    cout << n << " ";               // work BEFORE the recursive call
+    countdown(n - 1);               // recursive call: one level deeper
+    cout << "Exiting countdown(" << n << ")" << endl;   // work AFTER
+}
+
+void buggyCountdown(int n)
+{
+    cout << n << " ";
+    buggyCountdown(n - 1);          // no base case: never stops
+}
+
+void fixedCountdown(int n)
+{
+    if (n <= 0)                     // base case
+        return;
+    cout << n << " ";
+    fixedCountdown(n - 1);
+}
+
+// ============================ Q3 / Q4 ============================
+void tailPrint(int n)
+{
+    if (n <= 0)
+        return;
+    cout << n << " ";               // print first ...
+    tailPrint(n - 1);               // ... the call is the LAST action
+}
+
+void nonTailPrint(int n)
+{
+    if (n <= 0)
+        return;
+    nonTailPrint(n - 1);            // call first ...
+    cout << n << " ";               // ... printing waits on the stack
+}
+
+int tailSum(int n, int accumulator)
+{
+    if (n == 0)
+        return accumulator;         // the answer is already complete
+    return tailSum(n - 1, accumulator + n);   // nothing pending
+}
+
+int nonTailSum(int n)
+{
+    if (n == 0)
+        return 0;
+    return n + nonTailSum(n - 1);   // the "+ n" waits for the result
+}
+
+// ============================ Q5 ============================
+long long factorial(int n)
+{
+    if (n < 0)
+        throw invalid_argument("Factorial of negative number is undefined");
+    if (n == 0 || n == 1)
+        return 1;                   // base case
+    return n * factorial(n - 1);    // pending multiplication
+}
+
+long long factorialTail(int n, long long acc)
+{
+    if (n <= 1)
+        return acc;
+    return factorialTail(n - 1, n * acc);
+}
+
+// ============================ Q6 ============================
+double power(double base, int exponent, int& calls)
+{
+    calls++;
+    if (exponent == 0) return 1;                            // base case 1
+    if (exponent == 1) return base;                         // base case 2
+    if (exponent < 0) return 1 / power(base, -exponent, calls);
+    return base * power(base, exponent - 1, calls);         // one less
+}
+
+double fastPower(double base, int exponent, int& calls)
+{
+    calls++;
+    if (exponent == 0) return 1;
+    if (exponent < 0) return 1 / fastPower(base, -exponent, calls);
+    double half = fastPower(base, exponent / 2, calls);     // halve it
+    if (exponent % 2 == 0)
+        return half * half;
+    return half * half * base;                              // odd: x base
+}
+
+// ============================ Q7 ============================
+bool isEven(int n)
+{
+    if (n < 0) n = -n;
+    if (n == 0) return true;        // base case
+    return isOdd(n - 1);            // calls the OTHER function
+}
+
+bool isOdd(int n)
+{
+    if (n < 0) n = -n;
+    if (n == 0) return false;       // base case
+    return isEven(n - 1);
+}
+
+// ============================ Q9 ============================
+void parseExpression(const string& expr, int& index)
+{
+    cout << "Entering parseExpression at index " << index << endl;
+    while (index < (int)expr.length() && expr[index] != ')') {
+        if (isdigit(expr[index])) {
+            parseOperand(expr, index);
+        }
+        else if (expr[index] == '+' || expr[index] == '*' ||
+            expr[index] == '-') {
+            cout << "Operator: " << expr[index] << endl;
+            index++;
+        }
+        else if (expr[index] == '(') {
+            parseOperand(expr, index);          // indirect recursion
+        }
+        else {
+            index++;                            // skip spaces etc.
+        }
     }
-
-    // ---------- Q6: power ----------
-    int calls = 0;
-    cout << fixed << setprecision(3);
-    cout << "[Q6] power(2, 3) = " << power(2, 3, calls)
-        << "   power(2, -3) = " << power(2, -3, calls)
-        << "   power(5, 0) = " << power(5, 0, calls) << endl;
-    calls = 0;
-    cout << "[Q6] power(2, 10) = " << power(2, 10, calls)
-        << "  calls = " << calls << endl;
-    calls = 0;
-    cout << "[Q6] fastPower(2, 10) = " << fastPower(2, 10, calls)
-        << "  calls = " << calls << endl;
-    calls = 0;
-    cout << "[Q6] fastPower(2, 100) calls = ";
-    fastPower(2, 100, calls);
-    cout << calls << endl;
-    cout << defaultfloat;
-
-    // ---------- Q7: isEven / isOdd ----------
-    cout << "[Q7] isEven(4) = " << isEven(4)
-        << "   isOdd(4) = " << isOdd(4) << endl;
-    cout << "[Q7] isEven(7) = " << isEven(7)
-        << "   isOdd(-3) = " << isOdd(-3) << endl;
-
-    // ---------- Q8: linked list, recursive ----------
-    LinkedList list;
-    list.insertAtFront(4);  list.insertAtFront(3);
-    list.insertAtFront(2);  list.insertAtFront(1);          // 1 2 3 4
-    cout << "[Q8] ";  list.display();
-    cout << "[Q8] backward: ";  list.displayBackward();
-    list.reverse();
-    cout << "[Q8] reversed: ";  list.display();
-
-    // ---------- Q9: expression parser ----------
-    string expr = "2+(3*(4+5))";
-    int index = 0;
-    cout << "[Q9] parsing " << expr << endl;
-    parseExpression(expr, index);
-
-    // ---------- Q10: tree recursion ----------
-    for (int n : { 5, 10, 20, 25 }) {
-        long long fibCalls = 0;
-        long long value = fib(n, fibCalls);
-        cout << "[Q10] fib(" << n << ") = " << value
-            << "  calls = " << fibCalls
-            << "  fibIter = " << fibIter(n) << endl;
+    if (index < (int)expr.length() && expr[index] == ')') {
+        cout << "Closing parenthesis at index " << index << endl;
+        index++;                                // move past ')'
     }
+    cout << "Exiting parseExpression at index " << index << endl;
+}
+
+void parseOperand(const string& expr, int& index)
+{
+    if (isdigit(expr[index])) {
+        cout << "Operand: " << expr[index] << endl;
+        index++;
+    }
+    else if (expr[index] == '(') {
+        cout << "Opening parenthesis at index " << index << endl;
+        index++;                                // skip '('
+        parseExpression(expr, index);           // indirect recursion
+    }
+}
+
+// ============================ Q10 ============================
+long long fib(int n, long long& calls)
+{
+    calls++;
+    if (n <= 1)
+        return n;                   // fib(0) = 0, fib(1) = 1
+    return fib(n - 1, calls) + fib(n - 2, calls);   // TWO calls: tree
+}
+
+long long fibIter(int n)
+{
+    long long a = 0, b = 1;
+    for (int i = 0; i < n; i++) {
+        long long next = a + b;
+        a = b;
+        b = next;
+    }
+    return a;
 }
