@@ -9,7 +9,7 @@ ArrayStack::ArrayStack()
 
 bool ArrayStack::push(int value)
 {
-    return false;                   // TODO (Q3)
+                    
 }
 
 bool ArrayStack::pop(int& value)
